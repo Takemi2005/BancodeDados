@@ -1,7 +1,6 @@
 CREATE DATABASE Oficina;
 USE Oficina;
-
-
+ 
 CREATE TABLE VEICULO (
 modelo_veiculo varchar(100),
 marca_veiculo varchar(100),
@@ -65,4 +64,29 @@ FOREIGN KEY(id_servico) REFERENCES SERVICO (id_servico),
 FOREIGN KEY(id_mecanico) REFERENCES MECANICOS (id_mecanico)
 );
 
-ALTER TABLE VEICULO ADD FOREIGN KEY(id_cliente) REFERENCES CLIENTE (id_cliente)
+ALTER TABLE VEICULO ADD FOREIGN KEY(id_cliente) REFERENCES CLIENTE (id_cliente);
+
+-- 1. Adicionar campos de status e data à tabela principal que representa a Ordem de Serviço (ordem_servico)
+ALTER TABLE ordem_servico
+ADD COLUMN data_abertura DATE,
+ADD COLUMN status_os ENUM('Aberta', 'Em Execução', 'Aguardando Peça', 'Concluída', 'Cancelada');
+
+-- 2. Adicionar o campo especialidade à tabela MECANICOS
+ALTER TABLE MECANICOS
+ADD COLUMN especialidade VARCHAR(100);
+
+-- 3. Adicionar campos de custo e venda à tabela ESTOQUE para o Desafio (Tabela Pecas)
+ALTER TABLE ESTOQUE
+ADD COLUMN preco_custo DECIMAL(7,2),
+ADD COLUMN preco_venda DECIMAL(7,2);
+
+-- 1. Adicionar campos de status, datas e valor_total na tabela ordem_servico
+ALTER TABLE ordem_servico
+ADD COLUMN data_conclusao DATE,
+ADD COLUMN valor_total_os DECIMAL(8,2) DEFAULT 0.00;
+
+
+-- Adicionar 'diagnostico_entrada' a ORDEM_SERVICO para que possamos REMOVÊ-LA
+ALTER TABLE ordem_servico
+ADD COLUMN diagnostico_entrada VARCHAR(255);
+
